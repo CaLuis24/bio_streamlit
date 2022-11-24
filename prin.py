@@ -25,18 +25,24 @@ if archivo_registros_presencia is not None:
                                                                        registros_presencia.decimalLatitude),
                                            crs='EPSG:4326')
 
-  # Limpieza de datos
-# Eliminación de registros con valores nulos en la columna 'species'
- registros_presencia = registros_presencia[registros_presencia['species'].notna()]
-# Cambio del tipo de datos del campo de fecha
- registros_presencia["eventDate"] = pd.to_datetime(registros_presencia["eventDate"])
+    # Limpieza de datos
+    # Eliminación de registros con valores nulos en la columna 'species' 
+    registros_presencia = registros_presencia[registros_presencia['species'].notna()]
+    # Cambio del tipo de datos del campo de fecha
+    registros_presencia["eventDate"] = pd.to_datetime(registros_presencia["eventDate"])
  
- # Especificación de filtros
-# Especie
-lista_especies = registros_presencia.species.unique().tolist()
-lista_especies.sort()
-filtro_especie = st.sidebar.selectbox('Seleccione la especie', lista_especies)
+    # Especificación de filtros
+    # Especie
+    lista_especies = registros_presencia.species.unique().tolist()
+    lista_especies.sort()
+    filtro_especie = st.sidebar.selectbox('Seleccione la especie', lista_especies)
 
-# PROCESAMIENTO
- # Filtrado
-registros_presencia = registros_presencia[registros_presencia['species'] == filtro_especie]
+    # PROCESAMIENTO
+    # Filtrado
+    registros_presencia = registros_presencia[registros_presencia['species'] == filtro_especie]
+
+    # SALIDAS
+
+    # Tabla de registros de presencia
+    st.header('Registros de presencia')
+    st.dataframe(registros_presencia[['family', 'species', 'eventDate', 'locality', 'occurrenceID']].rename(columns = {'family':'Familia', 'species':'Especie', 'eventDate':'Fecha', 'locality':'Localidad', 'occurrenceID':'Origen del dato'}))
